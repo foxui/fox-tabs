@@ -97,7 +97,7 @@
                 <fox-template>
                     <fox-ajax auto url="https://api.douban.com/v2/book/search" params='{"q":"javascript"}'  dataType="jsonp"></fox-ajax>
 
-                    <p>共计 { data.total } 条结果</p>
+                    <p><a href="https://api.douban.com/v2/book/search?q=web">共计 { data.total } 条结果</a></p>
 
                     <ul class="books">
                         <li rv-each-book="data.books">

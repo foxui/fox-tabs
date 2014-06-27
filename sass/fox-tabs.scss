@@ -19,6 +19,7 @@ fox-tabs{
 
     // Section within controller
     & > *{
+        display: block;
         @include flex-row-item-fullfilled();
         overflow: hidden;
         color: $primary-color;
