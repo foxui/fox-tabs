@@ -1,4 +1,4 @@
-fox-tabs
-========
+fox-toolbar
+==============
 
-switchable tabs components including ios segmentedcontrol style.
+

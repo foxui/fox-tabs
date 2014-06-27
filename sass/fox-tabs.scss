@@ -1,0 +1,57 @@
+
+// Variables
+@import "../../fox-core/sass/variables.scss";
+
+// Mixins
+@import "../../fox-core/sass/mixins.scss";
+
+// Components
+// --------------------------------------------------
+
+fox-tabs{
+    position: relative;
+    overflow: hidden;
+    font-size: 12px;
+    font-weight: $font-weight-light;
+    border: 1px solid $primary-color;
+    border-radius: 3px;
+    @include flex-row-container();
+
+    // Section within controller
+    & > *{
+        @include flex-row-item-fullfilled();
+        overflow: hidden;
+        color: $primary-color;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        border-left: 1px solid #ccc;
+        border-color: inherit;
+        line-height: 1;
+        padding-top: 6px;
+        padding-bottom: 7px;
+        @include transition(background-color .1s linear);
+
+        // Remove border-left and shadow from first section
+        &:first-child {
+            border-left-width: 0;
+        }
+
+        // Tap state of segmented controller
+        &:active {
+            color: #fff;
+            background-color: lighten($primary-color, 35%);
+        }
+
+        &.active {
+            color: #fff;
+            background-color: $primary-color;
+        }
+    }
+}
+
+// Tabs in toolbar
+fox-toolbar fox-tabs{
+    margin-top: 9px;
+}
+

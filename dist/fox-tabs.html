@@ -1,0 +1,106 @@
+<link rel="stylesheet" href="css/fox-tabs.css"/>
+
+/**
+ * tabs 和 tabcontent 的映射规则
+ * 1. 如果无 contentselector 则默认从 fox-tabs 的 nextElementSibing 中 query fox-tabs-content
+ * 2. 如果有 contentselector 则将 query 结果作为 tabcontent
+ * 3. tabs 的顺序和 contents 的顺序一一对应
+ */
+<fox-element name="fox-tabs" attributes="contentselector">
+    <script>
+    (function(env){
+
+        var activeTabClass = 'active';
+        var activeTabSelector = '.' + activeTabClass;
+        var tabContentSelector = 'fox-tabs-content';
+
+        function clickHandler(e) {
+
+            // clear last selected state
+            var activeTab = this.parentNode.querySelector(activeTabSelector);
+            activeTab && activeTab.classList.remove(activeTabClass);
+
+            this.classList.add(activeTabClass);
+
+            this.parentNode.switchContent(this);
+        }
+
+        function findContents() {
+            if (this.contentselector) {
+                this.contents = fox.query(document, this.contentselector);
+            }
+            else {
+                var sibling = this.nextElementSibing;
+
+                sibling &&
+                (this.contents = fox.query(sibling, tabContentSelector));
+            }
+        }
+
+        fox('fox-tabs', {
+
+            contentselector: null,
+
+            autoload: false,
+
+            lifecycle: {
+                created: function() {
+                    this.tabs = fox.queryChildren(this, '*');
+
+                    this.tabs.forEach(function(tab){
+                        tab.addEventListener('touchend', clickHandler, false);
+                    });
+
+                    findContents.call(this);
+                },
+
+                contentselectorChanged: function() {
+                    findContents.call(this);
+                },
+
+                removed: function() {
+                    this.tabs.forEach(function(tab){
+                        tab.removeEventListener('touchend', clickHandler, false);
+                    });
+                }
+            },
+
+            methods: {
+                switchContent: function(activeTab) {
+                    if (!this.contents) {
+                        return;
+                    }
+
+                    // hide last active tab content
+                    this.contents.forEach(function(content){
+                        content.hide();
+                    });
+
+                    var activeIndex = this.tabs.indexOf(activeTab);
+                    var activeContent = this.contents[activeIndex];
+
+                    if (this.autoload) {
+                        // find data tag and send the init request
+                        var dataAjax = activeContent.querySelector('fox-ajax');
+
+                        // only send the init request
+                        if (dataAjax && !dataAjax.response) {
+                            dataAjax.go();
+                        }
+                    }
+
+                    activeContent && activeContent.show();
+                }
+            },
+
+            accessors: {
+                autoload: {
+                    attribute: {
+                        boolean: true
+                    }
+                }
+            }
+        });
+    })(this);
+    </script>
+</fox>
