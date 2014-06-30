@@ -26,11 +26,12 @@
         }
 
         function findContents() {
+
             if (this.contentselector) {
                 this.contents = fox.query(document, this.contentselector);
             }
             else {
-                var sibling = this.nextElementSibing;
+                var sibling = this.nextElementSibling;
 
                 sibling &&
                 (this.contents = fox.query(sibling, tabContentSelector));
